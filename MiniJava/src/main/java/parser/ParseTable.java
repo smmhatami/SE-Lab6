@@ -56,10 +56,8 @@ public class ParseTable {
                     } else if (terminals.containsKey(j)) {
 //                        try {
                         MyToken t = terminals.get(j);
-                        // Action a = new Action(cols[j].charAt(0) == 'r' ? act.reduce : act.shift, Integer.parseInt(cols[j].substring(1)));
                         Integer actionNumber = Integer.parseInt(cols[j].substring(1));
                         Action a = cols[j].charAt(0) == 'r' ? new ReduceAction(actionNumber) : new ShiftAction(actionNumber);
-                        // new Action(cols[j].charAt(0) == 'r' ? act.reduce : act.shift, Integer.parseInt(cols[j].substring(1)));
                         actionTable.get(actionTable.size() - 1).put(t, a);
 //                        }catch (StringIndexOutOfBoundsException e){
 //                            e.printStackTrace();

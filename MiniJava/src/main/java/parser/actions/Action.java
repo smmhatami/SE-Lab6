@@ -11,22 +11,6 @@ public abstract class Action {
         this.number = number;
     }
 
-    // public String toString() {
-    //     switch (action) {
-    //         case accept:
-    //             return "acc";
-    //         case shift:
-    //             return "s" + number;
-    //         case reduce:
-    //             return "r" + number;
-    //     }
-    //     return action.toString() + number;
-    // }
-
     public abstract boolean performAction(Parser parser);
     
-}
-
-enum act {
-    shift, reduce, accept
 }
