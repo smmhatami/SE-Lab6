@@ -1,17 +1,17 @@
 package parser.scannerFacade;
 
-import scanner.lexicalAnalyzer;
+import scanner.LexicalAnalyzer;
 
 public class ScannerFacade {
 
-    private lexicalAnalyzer lexicalAnalyzer;
+    private LexicalAnalyzer lexicalAnalyzer;
     private MyToken currentToken;
 
     public ScannerFacade() {
     }
 
     public void newLexicalAnalyzer(java.util.Scanner sc) {
-        lexicalAnalyzer = new lexicalAnalyzer(sc);
+        lexicalAnalyzer = new LexicalAnalyzer(sc);
     }
     
     public MyToken getNextToken() {
