@@ -9,15 +9,18 @@ import java.util.Stack;
 import Log.Log;
 import codeGenerator.CodeGenerator;
 import errorHandler.ErrorHandler;
-import scanner.lexicalAnalyzer;
-import scanner.token.Token;
+import parser.scannerFacade.MyToken;
+// import scanner.lexicalAnalyzer;
+// import scanner.token.Token;
+import parser.scannerFacade.ScannerFacade;
 
 public class Parser {
     private ArrayList<Rule> rules;
     private Stack<Integer> parsStack;
     private ParseTable parseTable;
-    private lexicalAnalyzer lexicalAnalyzer;
+    // private lexicalAnalyzer lexicalAnalyzer;
     private CodeGenerator cg;
+    private ScannerFacade scanner;
 
     public Parser() {
         parsStack = new Stack<Integer>();
@@ -36,11 +39,12 @@ public class Parser {
             e.printStackTrace();
         }
         cg = new CodeGenerator();
+        scanner = new ScannerFacade();
     }
 
     public void startParse(java.util.Scanner sc) {
-        lexicalAnalyzer = new lexicalAnalyzer(sc);
-        Token lookAhead = lexicalAnalyzer.getNextToken();
+        scanner.newLexicalAnalyzer(sc);
+        MyToken lookAhead = scanner.getNextToken();
         boolean finish = false;
         Action currentAction;
         while (!finish) {
@@ -54,8 +58,7 @@ public class Parser {
                 switch (currentAction.action) {
                     case shift:
                         parsStack.push(currentAction.number);
-                        lookAhead = lexicalAnalyzer.getNextToken();
-
+                        lookAhead = scanner.getNextToken();
                         break;
                     case reduce:
                         Rule rule = rules.get(currentAction.number);
@@ -69,7 +72,7 @@ public class Parser {
                         Log.print(/*"new State : " + */parsStack.peek() + "");
 //                        Log.print("");
                         try {
-                            cg.semanticFunction(rule.semanticAction, lookAhead);
+                            cg.semanticFunction(rule.semanticAction, lookAhead.getToken());
                         } catch (Exception e) {
                             Log.print("Code Genetator Error");
                         }
