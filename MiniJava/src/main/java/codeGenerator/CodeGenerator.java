@@ -453,12 +453,10 @@ public class CodeGenerator {
 
     private varType FindSymbolType(SymbolType symbolType){
 
-        switch (symbolType) {
-            case Bool:
-                return varType.Bool;
-            default:
-                return varType.Int;
+        if (symbolType == SymbolType.Bool) {
+            return varType.Bool;
         }
+        return varType.Int;
     }
 
     public void main() {
