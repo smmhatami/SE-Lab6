@@ -14,10 +14,10 @@ import java.util.Stack;
  */
 public class CodeGenerator {
     private Memory memory;
-    private Stack<Address> addressStack;
-    private Stack<String> symbolStack;
-    private Stack<String> callStack;
-    private SymbolTable symbolTable;
+    private final Stack<Address> addressStack;
+    private final Stack<String> symbolStack;
+    private final Stack<String> callStack;
+    private final SymbolTable symbolTable;
 
     public CodeGenerator() {
         memory = new Memory();
@@ -279,14 +279,23 @@ public class CodeGenerator {
         Address temp = new Address(getMemory().getTemp(), varType.Int);
         Address s2 = addressStack.pop();
         Address s1 = addressStack.pop();
-        if (s1.varType != varType.Int || s2.varType != varType.Int) {
-            ErrorHandler.printError("In mult two operands must be integer");
-        }
+        CheckIfMathematicalOpsHasError(operation, s2, s1);
         getMemory().add3AddressCode(operation, s1, s2, temp);
 //        getMemory().saveMemory();
         addressStack.push(temp);
     }
 
+    private static void CheckIfMathematicalOpsHasError(Operation operation, Address s2, Address s1) {
+        if (s1.varType != varType.Int || s2.varType != varType.Int) {
+            if(operation == Operation.ADD){
+                ErrorHandler.printError("In add two operands must be integer");
+            }else if(operation == Operation.SUB){
+                ErrorHandler.printError("In sub two operands must be integer");
+            }else if(operation == Operation.MULT){
+                ErrorHandler.printError("In mult two operands must be integer");
+            }
+        }
+    }
 
 
     public void label() {
