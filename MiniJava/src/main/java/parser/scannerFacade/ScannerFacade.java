@@ -7,9 +7,6 @@ public class ScannerFacade {
     private LexicalAnalyzer lexicalAnalyzer;
     private MyToken currentToken;
 
-    public ScannerFacade() {
-    }
-
     public void newLexicalAnalyzer(java.util.Scanner sc) {
         lexicalAnalyzer = new LexicalAnalyzer(sc);
     }
