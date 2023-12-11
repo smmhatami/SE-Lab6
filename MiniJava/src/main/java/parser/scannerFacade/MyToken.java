@@ -1,8 +1,5 @@
 package parser.scannerFacade;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import scanner.token.Token;
 import scanner.type.Type;
 
