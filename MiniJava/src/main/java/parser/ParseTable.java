@@ -24,11 +24,9 @@ public class ParseTable {
         String[] cols = Rows[0].split("\",\"");
         for (int i = 1; i < cols.length; i++) {
             if (cols[i].startsWith("Goto")) {
-                String temp = cols[i].substring(5);
                 try {
-                    nonTerminals.put(i, NonTerminal.valueOf(temp));
+                    nonTerminals.put(i, NonTerminal.valueOf(cols[i].substring(5)));
                 } catch (Exception e) {
-                    temp = temp;
                 }
             } else {
                 terminals.put(i, new MyToken(MyToken.getTyepFormString(cols[i]), cols[i]));
