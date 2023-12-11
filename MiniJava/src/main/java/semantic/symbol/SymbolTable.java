@@ -86,7 +86,10 @@ public class SymbolTable {
     }
 
     public Symbol getNextParam(String className, String methodName) {
-        return klasses.get(className).Methodes.get(methodName).getNextParameter();
+        Method a = klasses.get(className).Methodes.get(methodName);
+        Symbol res = a.getCurrentParameter();
+        a.gotoNextParameter();
+        return res;
     }
 
     public void startCall(String className, String methodName) {
@@ -176,8 +179,12 @@ public class SymbolTable {
             index = 0;
         }
 
-        private Symbol getNextParameter() {
-            return parameters.get(orderdParameters.get(index++));
+        private Symbol getCurrentParameter() {
+            return parameters.get(orderdParameters.get(index));
+        }
+
+        private void gotoNextParameter() {
+            index += 1;
         }
     }
 

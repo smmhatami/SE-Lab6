@@ -85,9 +85,6 @@ public class ParseTable {
     }
 
     public Action getActionTable(int currentState, MyToken terminal) {
-        // System.err.println(actionTable.get(currentState));
-        // System.err.println(terminal);
-        // System.err.println(currentState);
         return actionTable.get(currentState).get(terminal);
     }
 }
