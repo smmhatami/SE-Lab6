@@ -19,18 +19,5 @@ public class ShiftAction extends Action {
         parser.getNextToken();
         return false;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof AcceptAction) {
-            return ((AcceptAction) obj).number == this.number;
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return number;
-    }
     
 }
