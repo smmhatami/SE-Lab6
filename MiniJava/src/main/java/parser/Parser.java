@@ -40,9 +40,17 @@ public class Parser {
         scanner = new ScannerFacade();
     }
 
+    public ScannerFacade getScanner() {
+        return scanner;
+    }
+
+    public void setScanner(ScannerFacade scanner) {
+        this.scanner = scanner;
+    }
+
     public void startParse(java.util.Scanner sc) {
-        scanner.newLexicalAnalyzer(sc);
-        MyToken lookAhead = scanner.getNextToken();
+        getScanner().newLexicalAnalyzer(sc);
+        MyToken lookAhead =  getScanner().getNextToken();
         boolean finish = false;
         Action currentAction;
         while (!finish) {
@@ -56,7 +64,7 @@ public class Parser {
                 switch (currentAction.action) {
                     case shift:
                         parsStack.push(currentAction.number);
-                        lookAhead = scanner.getNextToken();
+                        lookAhead =  getScanner().getNextToken();
                         break;
                     case reduce:
                         Rule rule = rules.get(currentAction.number);
