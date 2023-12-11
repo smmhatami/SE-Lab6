@@ -164,8 +164,7 @@ public class CodeGenerator {
             try {
 
                 Symbol s = symbolTable.get(className, methodName, next.value);
-                varType t = FindSymbolType(s.type);
-                ss.push(new Address(s.address, t));
+                ss.push(new Address(s.address, FindSymbolType(s.type)));
 
 
             } catch (Exception e) {
@@ -184,8 +183,7 @@ public class CodeGenerator {
         ss.pop();
 
         Symbol s = symbolTable.get(symbolStack.pop(), symbolStack.pop());
-        varType t = FindSymbolType(s.type);
-        ss.push(new Address(s.address, t));
+        ss.push(new Address(s.address, FindSymbolType(s.type)));
 
     }
 
@@ -219,8 +217,7 @@ public class CodeGenerator {
             ErrorHandler.printError("The few argument pass for method");
         } catch (IndexOutOfBoundsException e) {
         }
-        varType t = FindSymbolType(symbolTable.getMethodReturnType(className, methodName));
-        Address temp = new Address(memory.getTemp(), t);
+        Address temp = new Address(memory.getTemp(), FindSymbolType(symbolTable.getMethodReturnType(className, methodName)));
         ss.push(temp);
         memory.add3AddressCode(Operation.ASSIGN, new Address(temp.num, varType.Address, TypeAddress.Imidiate), new Address(symbolTable.getMethodReturnAddress(className, methodName), varType.Address), null);
         memory.add3AddressCode(Operation.ASSIGN, new Address(memory.getCurrentCodeBlockAddress() + 2, varType.Address, TypeAddress.Imidiate), new Address(symbolTable.getMethodCallerAddress(className, methodName), varType.Address), null);
@@ -236,12 +233,11 @@ public class CodeGenerator {
 //        String className = symbolStack.pop();
         try {
             Symbol s = symbolTable.getNextParam(callStack.peek(), methodName);
-            varType t = FindSymbolType(s.type);
             Address param = ss.pop();
-            if (param.varType != t) {
+            if (param.varType != FindSymbolType(s.type)) {
                 ErrorHandler.printError("The argument type isn't match");
             }
-            memory.add3AddressCode(Operation.ASSIGN, param, new Address(s.address, t), null);
+            memory.add3AddressCode(Operation.ASSIGN, param, new Address(s.address, FindSymbolType(s.type)), null);
 
 //        symbolStack.push(className);
 
@@ -417,8 +413,7 @@ public class CodeGenerator {
 
         String methodName = symbolStack.pop();
         Address s = ss.pop();
-        varType temp = FindSymbolType(symbolTable.getMethodReturnType(symbolStack.peek(), methodName));
-        if (s.varType != temp) {
+        if (s.varType != FindSymbolType(symbolTable.getMethodReturnType(symbolStack.peek(), methodName))) {
             ErrorHandler.printError("The type of method and return address was not match");
         }
         memory.add3AddressCode(Operation.ASSIGN, s, new Address(symbolTable.getMethodReturnAddress(symbolStack.peek(), methodName), varType.Address, TypeAddress.Indirect), null);
