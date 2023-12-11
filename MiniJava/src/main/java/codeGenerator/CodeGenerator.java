@@ -106,7 +106,7 @@ public class CodeGenerator {
                 defMethod();
                 break;
             case 25:
-                popClass();
+                symbolStack.pop();
                 break;
             case 26:
                 extend();
@@ -388,9 +388,6 @@ public class CodeGenerator {
         symbolStack.push(methodName);
     }
 
-    public void popClass() {
-        symbolStack.pop();
-    }
 
     public void extend() {
         ss.pop();
