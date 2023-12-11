@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import Log.Log;
 import errorHandler.ErrorHandler;
+import parser.actions.Action;
 import parser.scannerFacade.MyToken;
 import parser.scannerFacade.ScannerFacade;
 
@@ -53,32 +54,35 @@ public class Parser {
                 Log.print(currentAction.toString());
                 //Log.print("");
 
-                switch (currentAction.action) {
-                    case shift:
-                        parsStack.push(currentAction.number);
-                        lookAhead = scanner.getNextToken();
-                        break;
-                    case reduce:
-                        Rule rule = rules.get(currentAction.number);
-                        for (int i = 0; i < rule.RHS.size(); i++) {
-                            parsStack.pop();
-                        }
+                finish = currentAction.performAction(this);
+                lookAhead = scanner.getCurrentToken();
 
-                        Log.print(/*"state : " +*/ parsStack.peek() + "\t" + rule.LHS);
-//                        Log.print("LHS : "+rule.LHS);
-                        parsStack.push(parseTable.getGotoTable(parsStack.peek(), rule.LHS));
-                        Log.print(/*"new State : " + */parsStack.peek() + "");
-//                        Log.print("");
-                        try {
-                            cg.semanticFunction(rule.semanticAction, lookAhead.getToken());
-                        } catch (Exception e) {
-                            Log.print("Code Genetator Error");
-                        }
-                        break;
-                    case accept:
-                        finish = true;
-                        break;
-                }
+                // switch (currentAction.action) {
+                    // case shift:
+                    //     parsStack.push(currentAction.number);
+                    //     lookAhead = scanner.getNextToken();
+                    //     break;
+//                     case reduce:
+//                         Rule rule = rules.get(currentAction.number);
+//                         for (int i = 0; i < rule.RHS.size(); i++) {
+//                             parsStack.pop();
+//                         }
+
+//                         Log.print(/*"state : " +*/ parsStack.peek() + "\t" + rule.LHS);
+// //                        Log.print("LHS : "+rule.LHS);
+//                         parsStack.push(parseTable.getGotoTable(parsStack.peek(), rule.LHS));
+//                         Log.print(/*"new State : " + */parsStack.peek() + "");
+// //                        Log.print("");
+//                         try {
+//                             cg.semanticFunction(rule.semanticAction, lookAhead.getToken());
+//                         } catch (Exception e) {
+//                             Log.print("Code Genetator Error");
+//                         }
+//                         break;
+                    // case accept:
+                    //     finish = true;
+                    //     break;
+                // }
                 Log.print("");
             } catch (Exception ignored) {
                 ignored.printStackTrace();
@@ -100,5 +104,33 @@ public class Parser {
             }
         }
         if (!ErrorHandler.hasError) cg.printMemory();
+    }
+
+    public Rule getRule(int ruleNum) { 
+        return rules.get(ruleNum);
+    }
+
+    public Integer popAction() {
+        return parsStack.pop();
+    } 
+
+    public Integer peekStack() {
+        return parsStack.peek();
+    }
+
+    public void pushStackGoto(Rule rule) {
+        parsStack.push(parseTable.getGotoTable(parsStack.peek(), rule.LHS));
+    }
+
+    public void pushIntStack(Integer number) {
+        parsStack.push(number);
+    }
+
+    public void cgSemanticFunction(Rule rule) {
+        cg.semanticFunction(rule.semanticAction, scanner.getCurrentToken().getToken());
+    }
+
+    public void getNextToken(){
+        scanner.getNextToken();
     }
 }

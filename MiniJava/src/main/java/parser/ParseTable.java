@@ -1,5 +1,9 @@
 package parser;
 
+import parser.actions.AcceptAction;
+import parser.actions.Action;
+import parser.actions.ReduceAction;
+import parser.actions.ShiftAction;
 // import scanner.token.Token;
 import parser.scannerFacade.MyToken;
 
@@ -48,11 +52,14 @@ public class ParseTable {
             for (int j = 1; j < cols.length; j++) {
                 if (!cols[j].equals("")) {
                     if (cols[j].equals("acc")) {
-                        actionTable.get(actionTable.size() - 1).put(terminals.get(j), new Action(act.accept, 0));
+                        actionTable.get(actionTable.size() - 1).put(terminals.get(j), new AcceptAction(0));
                     } else if (terminals.containsKey(j)) {
 //                        try {
                         MyToken t = terminals.get(j);
-                        Action a = new Action(cols[j].charAt(0) == 'r' ? act.reduce : act.shift, Integer.parseInt(cols[j].substring(1)));
+                        // Action a = new Action(cols[j].charAt(0) == 'r' ? act.reduce : act.shift, Integer.parseInt(cols[j].substring(1)));
+                        Integer actionNumber = Integer.parseInt(cols[j].substring(1));
+                        Action a = cols[j].charAt(0) == 'r' ? new ReduceAction(actionNumber) : new ShiftAction(actionNumber);
+                        // new Action(cols[j].charAt(0) == 'r' ? act.reduce : act.shift, Integer.parseInt(cols[j].substring(1)));
                         actionTable.get(actionTable.size() - 1).put(t, a);
 //                        }catch (StringIndexOutOfBoundsException e){
 //                            e.printStackTrace();
@@ -78,6 +85,9 @@ public class ParseTable {
     }
 
     public Action getActionTable(int currentState, MyToken terminal) {
+        // System.err.println(actionTable.get(currentState));
+        // System.err.println(terminal);
+        // System.err.println(currentState);
         return actionTable.get(currentState).get(terminal);
     }
 }

@@ -19,4 +19,8 @@ public class ScannerFacade {
         return currentToken;
     }
 
+    public MyToken getCurrentToken() {
+        return currentToken;
+    }
+
 }
