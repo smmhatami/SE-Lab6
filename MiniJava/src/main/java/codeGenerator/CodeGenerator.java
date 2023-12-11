@@ -101,16 +101,16 @@ public class CodeGenerator {
                 print();
                 break;
             case 19:
-                equal();
+                logicalOperation(Operation.EQ);
                 break;
             case 20:
-                lessThan();
+                logicalOperation(Operation.LT);
                 break;
             case 21:
-                and();
+                logicalOperation(Operation.AND);
                 break;
             case 22:
-                not();
+                logicalOperation(Operation.NOT);
                 break;
             case 23:
                 defClass();
@@ -325,49 +325,37 @@ public class CodeGenerator {
         getMemory().add3AddressCode(Operation.PRINT, addressStack.pop(), null, null);
     }
 
-    public void equal() {
+
+
+    public void logicalOperation(Operation operation) {
         Address temp = new Address(getMemory().getTemp(), varType.Bool);
         Address s2 = addressStack.pop();
         Address s1 = addressStack.pop();
-        if (s1.varType != s2.varType) {
-            ErrorHandler.printError("The type of operands in equal operator is different");
-        }
-        getMemory().add3AddressCode(Operation.EQ, s1, s2, temp);
+        checkIfLogicalOpsHasError(operation,s1,s2);
+        getMemory().add3AddressCode(operation, s1, s2, temp);
         addressStack.push(temp);
     }
 
-    public void lessThan() {
-        Address temp = new Address(getMemory().getTemp(), varType.Bool);
-        Address s2 = addressStack.pop();
-        Address s1 = addressStack.pop();
-        if (s1.varType != varType.Int || s2.varType != varType.Int) {
-            ErrorHandler.printError("The type of operands in less than operator is different");
+    private static void checkIfLogicalOpsHasError(Operation operation,Address s1 , Address s2) {
+        if (operation == Operation.NOT){
+            if (s1.varType != varType.Bool) {
+                ErrorHandler.printError("In not operator the operand must be boolean");
+            }
+        }else if (operation == Operation.AND){
+            if (s1.varType != varType.Bool || s2.varType != varType.Bool) {
+                ErrorHandler.printError("In and operator the operands must be boolean");
+            }
+        }else if (operation == Operation.LT){
+            if (s1.varType != varType.Int || s2.varType != varType.Int) {
+                ErrorHandler.printError("The type of operands in less than operator is different");
+            }
+        }else if (operation == Operation.EQ){
+            if (s1.varType != s2.varType) {
+                ErrorHandler.printError("The type of operands in equal operator is different");
+            }
         }
-        getMemory().add3AddressCode(Operation.LT, s1, s2, temp);
-        addressStack.push(temp);
     }
 
-    public void and() {
-        Address temp = new Address(getMemory().getTemp(), varType.Bool);
-        Address s2 = addressStack.pop();
-        Address s1 = addressStack.pop();
-        if (s1.varType != varType.Bool || s2.varType != varType.Bool) {
-            ErrorHandler.printError("In and operator the operands must be boolean");
-        }
-        getMemory().add3AddressCode(Operation.AND, s1, s2, temp);
-        addressStack.push(temp);
-    }
-
-    public void not() {
-        Address temp = new Address(getMemory().getTemp(), varType.Bool);
-        Address s2 = addressStack.pop();
-        Address s1 = addressStack.pop();
-        if (s1.varType != varType.Bool) {
-            ErrorHandler.printError("In not operator the operand must be boolean");
-        }
-        getMemory().add3AddressCode(Operation.NOT, s1, s2, temp);
-        addressStack.push(temp);
-    }
 
     public void defClass() {
         addressStack.pop();
