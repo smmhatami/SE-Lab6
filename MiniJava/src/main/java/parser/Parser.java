@@ -39,9 +39,17 @@ public class Parser {
         scanner = new ScannerFacade();
     }
 
+    public ScannerFacade getScanner() {
+        return scanner;
+    }
+
+    public void setScanner(ScannerFacade scanner) {
+        this.scanner = scanner;
+    }
+
     public void startParse(java.util.Scanner sc) {
-        scanner.newLexicalAnalyzer(sc);
-        MyToken lookAhead = scanner.getNextToken();
+        getScanner().newLexicalAnalyzer(sc);
+        MyToken lookAhead =  getScanner().getNextToken();
         boolean finish = false;
         Action currentAction;
         while (!finish) {
@@ -54,6 +62,7 @@ public class Parser {
 
                 finish = currentAction.performAction(this);
                 lookAhead = scanner.getCurrentToken();
+
 
                 Log.print("");
             } catch (Exception ignored) {
