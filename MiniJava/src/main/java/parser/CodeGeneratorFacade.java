@@ -1,6 +1,5 @@
 package parser;
 
-import Log.Log;
 import codeGenerator.CodeGenerator;
 import scanner.token.Token;
 
