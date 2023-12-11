@@ -14,14 +14,18 @@ import java.util.Stack;
  */
 public class CodeGenerator {
     private Memory memory;
-    private Stack<Address> ss = new Stack<Address>();
-    private Stack<String> symbolStack = new Stack<>();
-    private Stack<String> callStack = new Stack<>();
+    private Stack<Address> ss;
+    private Stack<String> symbolStack;
+    private Stack<String> callStack;
     private SymbolTable symbolTable;
 
     public CodeGenerator() {
-        symbolTable = new SymbolTable(memory);
         memory = new Memory();
+        ss = new Stack<>();
+        symbolStack = new Stack<>();
+        callStack = new Stack<>();
+        symbolTable = new SymbolTable(memory);
+
         //TODO
     }
 
@@ -85,10 +89,10 @@ public class CodeGenerator {
                 save();
                 break;
             case 15:
-                _while();
+                whileStatement();
                 break;
             case 16:
-                jpf_save();
+                jpfSave();
                 break;
             case 17:
                 jpHere();
@@ -100,7 +104,7 @@ public class CodeGenerator {
                 equal();
                 break;
             case 20:
-                less_than();
+                lessThan();
                 break;
             case 21:
                 and();
@@ -314,12 +318,12 @@ public class CodeGenerator {
         ss.push(new Address(getMemory().saveMemory(), varType.Address));
     }
 
-    public void _while() {
+    public void whileStatement() {
         getMemory().add3AddressCode(ss.pop().num, Operation.JPF, ss.pop(), new Address(getMemory().getCurrentCodeBlockAddress() + 1, varType.Address), null);
         getMemory().add3AddressCode(Operation.JP, ss.pop(), null, null);
     }
 
-    public void jpf_save() {
+    public void jpfSave() {
         Address save = new Address(getMemory().saveMemory(), varType.Address);
         getMemory().add3AddressCode(ss.pop().num, Operation.JPF, ss.pop(), new Address(getMemory().getCurrentCodeBlockAddress(), varType.Address), null);
         ss.push(save);
@@ -344,7 +348,7 @@ public class CodeGenerator {
         ss.push(temp);
     }
 
-    public void less_than() {
+    public void lessThan() {
         Address temp = new Address(getMemory().getTemp(), varType.Bool);
         Address s2 = ss.pop();
         Address s1 = ss.pop();
