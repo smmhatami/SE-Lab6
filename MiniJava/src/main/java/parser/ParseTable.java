@@ -48,8 +48,8 @@ public class ParseTable {
             actionTable.add(new HashMap<MyToken, Action>());
             gotoTable.add(new HashMap<>());
             for (int j = 1; j < cols.length; j++) {
-                if (!cols[j].equals("")) {
-                    if (cols[j].equals("acc")) {
+                if (!"".equals(cols[j])) {
+                    if ("acc".equals(cols[j])) {
                         actionTable.get(actionTable.size() - 1).put(terminals.get(j), new AcceptAction(0));
                     } else if (terminals.containsKey(j)) {
 //                        try {
