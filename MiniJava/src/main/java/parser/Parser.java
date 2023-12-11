@@ -7,11 +7,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import Log.Log;
-import codeGenerator.CodeGenerator;
 import errorHandler.ErrorHandler;
 import parser.scannerFacade.MyToken;
-// import scanner.lexicalAnalyzer;
-// import scanner.token.Token;
 import parser.scannerFacade.ScannerFacade;
 
 public class Parser {
@@ -19,7 +16,8 @@ public class Parser {
     private Stack<Integer> parsStack;
     private ParseTable parseTable;
     // private lexicalAnalyzer lexicalAnalyzer;
-    private CodeGenerator cg;
+    // private CodeGenerator cg;
+    private CodeGeneratorFacade cg;
     private ScannerFacade scanner;
 
     public Parser() {
@@ -38,7 +36,7 @@ public class Parser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        cg = new CodeGenerator();
+        cg = new CodeGeneratorFacade();
         scanner = new ScannerFacade();
     }
 
